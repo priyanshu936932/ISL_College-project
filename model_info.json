@@ -1,0 +1,17 @@
+{
+  "num_classes": 7,
+  "gestures": [
+    "alive",
+    "bad",
+    "female",
+    "good",
+    "happy",
+    "long",
+    "male"
+  ],
+  "num_frames": 16,
+  "target_size": [
+    112,
+    112
+  ]
+}

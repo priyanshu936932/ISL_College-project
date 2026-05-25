@@ -1,0 +1,10 @@
+# Indian Sign Language Gesture Recognition Requirements
+# Run with: conda activate dl_gpu  (Python 3.10, PyTorch 2.5.1 + CUDA already installed)
+torch>=2.5.0
+torchvision>=0.20.0
+numpy>=1.21.0
+opencv-python>=4.6.0
+scikit-learn>=1.0.0
+matplotlib>=3.5.0
+seaborn>=0.12.0
+mediapipe>=0.9.0

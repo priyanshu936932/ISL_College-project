@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISL Recognition — Bridging Silence with AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">🤟 ISL Recognition</div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="how-it-works.html">How It Works</a></li>
+                <li><a href="about.html">About ISL</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Bridging Silence with <strong>AI</strong></h1>
+                <p>Upload a video. Predict the gesture. Connect the world.</p>
+                
+                <div class="stat-counters">
+                    <div class="stat-card">
+                        <div class="stat-number">63M+</div>
+                        <div class="stat-label">Deaf Users in India</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">Gestures Recognized</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">96%</div>
+                        <div class="stat-label">Model Accuracy</div>
+                    </div>
+                </div>
+
+                <button class="hero-cta" onclick="document.querySelector('.upload-section').scrollIntoView({behavior: 'smooth'})">
+                    Get Started
+                </button>
+            </div>
+        </section>
+
+        <!-- Upload & Prediction Section -->
+        <section class="upload-section container">
+            <!-- Upload Card -->
+            <div class="upload-card">
+                <h2>📹 Upload Your Video</h2>
+                
+                <div class="drop-zone" id="drop-zone">
+                    <div class="drop-zone-content">
+                        <div class="drop-zone-icon">🎬</div>
+                        <div class="drop-zone-text">Drag & Drop Your Video</div>
+                        <div class="drop-zone-subtext">or click to browse files</div>
+                        <div class="drop-zone-subtext" style="margin-top: 15px; color: #94a3b8;">Supported: MP4, AVI, MOV • Max: 100MB</div>
+                    </div>
+                    <input type="file" id="video-upload" class="file-input" accept="video/mp4,video/avi,video/mov,video/quicktime,video/x-msvideo">
+                </div>
+
+                <video id="video-preview" class="video-preview" controls>
+                    <source id="video-source" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+
+                <div class="file-info" id="file-info" style="display: none;"></div>
+
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <button id="upload-analyze-btn" class="analyze-btn" style="flex: 1;" disabled>🔍 Analyze Video</button>
+                    <button id="change-video-btn" class="analyze-btn" style="flex: 1; background: linear-gradient(135deg, var(--teal), var(--pink)); display: none;" onclick="document.getElementById('video-upload').click()">📁 Change Video</button>
+                </div>
+            </div>
+
+            <!-- Prediction Card -->
+            <div class="prediction-card">
+                <h2>✨ Prediction Results</h2>
+                
+                <div class="prediction-display">
+                    <div class="prediction-icon" id="prediction-icon">🎬</div>
+                    <div class="prediction-name" id="prediction-name">Ready to Predict</div>
+                </div>
+
+                <div class="confidence-meter">
+                    <div class="confidence-circle">
+                        <div class="confidence-value" id="confidence-value">-</div>
+                    </div>
+                    <div class="confidence-label">Confidence Score</div>
+                </div>
+
+                <div class="class-probabilities" id="class-probabilities" style="display: none;">
+                    <div id="prob-bars-container"></div>
+                </div>
+
+                <div class="hit-counter">
+                    🔥 <span class="hit-number" id="hit-counter">0</span> videos analyzed
+                </div>
+
+                <div class="file-info" id="frames-info" style="margin-top: 20px; border-left-color: #14b8a6; display: none;"></div>
+            </div>
+        </section>
+
+        <!-- Gesture Library Section -->
+        <section class="gesture-section container">
+            <h2 class="section-title">🧏 Recognized ISL Gestures</h2>
+            
+            <div class="gesture-grid">
+                <div class="gesture-card" data-gesture="alive">
+                    <div class="gesture-card-content">
+                        <div class="gesture-icon">❤️</div>
+                        <div class="gesture-name">Alive</div>
+                        <div class="gesture-hindi">जीवित</div>
+                    </div>
+                </div>
+                
+                <div class="gesture-card" data-gesture="bad">
+                    <div class="gesture-card-content">
+                        <div class="gesture-icon">👎</div>
+                        <div class="gesture-name">Bad</div>
+                        <div class="gesture-hindi">बुरा</div>
+                    </div>
+                </div>
+                
+                <div class="gesture-card" data-gesture="female">
+                    <div class="gesture-card-content">
+                        <div class="gesture-icon">👩</div>
+                        <div class="gesture-name">Female</div>
+                        <div class="gesture-hindi">महिला</div>
+                    </div>
+                </div>
+                
+                <div class="gesture-card" data-gesture="good">
+                    <div class="gesture-card-content">
+                        <div class="gesture-icon">👍</div>
+                        <div class="gesture-name">Good</div>
+                        <div class="gesture-hindi">अच्छा</div>
+                    </div>
+                </div>
+                
+                <div class="gesture-card" data-gesture="happy">
+                    <div class="gesture-card-content">
+                        <div class="gesture-icon">😊</div>
+                        <div class="gesture-name">Happy</div>
+                        <div class="gesture-hindi">खुश</div>
+                    </div>
+                </div>
+                
+                <div class="gesture-card" data-gesture="long">
+                    <div class="gesture-card-content">
+                        <div class="gesture-icon">🙌</div>
+                        <div class="gesture-name">Long</div>
+                        <div class="gesture-hindi">लंबा</div>
+                    </div>
+                </div>
+                
+                <div class="gesture-card" data-gesture="male">
+                    <div class="gesture-card-content">
+                        <div class="gesture-icon">👨</div>
+                        <div class="gesture-name">Male</div>
+                        <div class="gesture-hindi">पुरुष</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section class="how-it-works container">
+            <h2 class="section-title" style="margin-bottom: 60px;">🚀 How It Works</h2>
+            
+            <div class="steps-container">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-icon">📹</div>
+                    <h3>Upload Video</h3>
+                    <p>Drag and drop or select a video of your ISL gesture</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-icon">🔢</div>
+                    <h3>Extract Frames</h3>
+                    <p>16 evenly-spaced frames are extracted from the video</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-icon">🧠</div>
+                    <h3>AI Analysis</h3>
+                    <p>Deep learning model analyzes the gesture in real-time</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-icon">🏷️</div>
+                    <h3>Get Result</h3>
+                    <p>Receive instant prediction with confidence score</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 60px;">
+                <a href="how-it-works.html" style="color: var(--purple); text-decoration: none; font-weight: 600; border-bottom: 2px solid var(--purple); padding-bottom: 5px;">
+                    Learn more about our technology →
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">🤟 ISL Recognition</div>
+                <div class="footer-tagline">Giving voice to silence. Making sign language recognition accessible to everyone through AI.</div>
+            </div>
+            
+            <div class="footer-tech">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="how-it-works.html">How It Works</a></li>
+                        <li><a href="about.html">About ISL</a></li>
+                    </ul>
+                </div>
+                
+                <div class="tech-stack">
+                    <h4>Built With</h4>
+                    <ul>
+                        <li>🔥 PyTorch (R(2+1)D-18)</li>
+                        <li>🎥 OpenCV (Video Processing)</li>
+                        <li>🐍 Flask (REST API)</li>
+                        <li>💻 HTML5 & CSS3</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2025 ISL Recognition | Made with ❤️ for India's deaf and hard of hearing community</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast hidden" id="toast">
+        <span id="toast-message"></span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

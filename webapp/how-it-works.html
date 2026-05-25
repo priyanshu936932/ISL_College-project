@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works — ISL Recognition</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="nav-logo">🤟 ISL Recognition</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="how-it-works.html" class="active">How It Works</a></li>
+                <li><a href="about.html">About ISL</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>How the <strong>AI</strong> Understands Your Hands</h1>
+                <p>A deep dive into the technology powering instant gesture recognition</p>
+            </div>
+        </section>
+
+        <!-- Pipeline Section -->
+        <section style="padding: 100px 20px;">
+            <div class="container">
+                <h2 class="section-title" style="margin-bottom: 80px;">🔄 The Recognition Pipeline</h2>
+                
+                <div class="steps-container">
+                    <div class="step" style="position: relative;">
+                        <div class="step-number">1</div>
+                        <div class="step-icon">📹</div>
+                        <h3>Video Upload</h3>
+                        <p>You upload an MP4, AVI, or MOV video containing your ISL gesture (2-3 seconds)</p>
+                    </div>
+                    
+                    <div class="step" style="position: relative;">
+                        <div class="step-number">2</div>
+                        <div class="step-icon">🔢</div>
+                        <h3>Frame Extraction</h3>
+                        <p>OpenCV extracts all frames from the video at 30fps or higher</p>
+                    </div>
+                    
+                    <div class="step" style="position: relative;">
+                        <div class="step-number">3</div>
+                        <div class="step-icon">📐</div>
+                        <h3>Preprocessing</h3>
+                        <p>Frames are intelligently downsampled to exactly 16 frames and resized to 112×112 pixels</p>
+                    </div>
+                    
+                    <div class="step" style="position: relative;">
+                        <div class="step-number">4</div>
+                        <div class="step-icon">🧠</div>
+                        <h3>AI Analysis</h3>
+                        <p>R(2+1)D-18 neural network analyzes the video in one forward pass</p>
+                    </div>
+                    
+                    <div class="step" style="position: relative;">
+                        <div class="step-number">5</div>
+                        <div class="step-icon">📊</div>
+                        <h3>Softmax</h3>
+                        <p>Network outputs are normalized using softmax to get probabilities for all 7 classes</p>
+                    </div>
+                    
+                    <div class="step" style="position: relative;">
+                        <div class="step-number">6</div>
+                        <div class="step-icon">🏆</div>
+                        <h3>Prediction</h3>
+                        <p>The class with highest probability is returned as the prediction with confidence score</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Model Deep Dive Section -->
+        <section style="padding: 100px 20px; background: var(--bg-secondary); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+            <div class="container">
+                <h2 class="section-title" style="margin-bottom: 60px;">🔬 The AI Model</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;">
+                    <div class="upload-card" style="min-height: auto;">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 15px;">🧠 R(2+1)D-18 Architecture</h3>
+                        <p style="color: var(--text-muted); line-height: 1.8;">
+                            A 3D Convolutional Neural Network that processes video sequences as a sequence of 2D spatial frames plus temporal information. The model is pretrained on the Kinetics-400 dataset (400,000 videos of human actions) and fine-tuned on our custom ISL gesture dataset.
+                        </p>
+                        <ul style="margin-top: 20px; list-style: none; display: flex; flex-direction: column; gap: 10px; color: var(--text-muted); font-size: 0.95rem;">
+                            <li>✅ Pretrained on Kinetics-400 (400K videos)</li>
+                            <li>✅ Fine-tuned on ISL dataset (7 gestures)</li>
+                            <li>✅ Optimized for temporal patterns</li>
+                        </ul>
+                    </div>
+
+                    <div class="upload-card" style="min-height: auto;">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 15px;">📸 Frame Processing</h3>
+                        <p style="color: var(--text-muted); line-height: 1.8;">
+                            Raw RGB video frames are the input to the model, not hand landmarks. This allows the network to learn features like hand shape, finger positions, motion dynamics, and body posture together.
+                        </p>
+                        <ul style="margin-top: 20px; list-style: none; display: flex; flex-direction: column; gap: 10px; color: var(--text-muted); font-size: 0.95rem;">
+                            <li>✅ Input: 16 frames × 112×112 pixels</li>
+                            <li>✅ Format: RGB color (3 channels)</li>
+                            <li>✅ Normalization: 0-1 float values</li>
+                        </ul>
+                    </div>
+
+                    <div class="upload-card" style="min-height: auto;">
+                        <h3 style="font-size: 1.5rem; margin-bottom: 15px;">🎯 Training & Accuracy</h3>
+                        <p style="color: var(--text-muted); line-height: 1.8;">
+                            Trained with data augmentation (flips, rotations, brightness changes) to improve robustness. Achieves 96% accuracy on the test set across all 7 ISL gesture classes.
+                        </p>
+                        <ul style="margin-top: 20px; list-style: none; display: flex; flex-direction: column; gap: 10px; color: var(--text-muted); font-size: 0.95rem;">
+                            <li>✅ 96% Training Accuracy</li>
+                            <li>✅ Data Augmentation Applied</li>
+                            <li>✅ 7-Class Classification</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Model Stats -->
+        <section style="padding: 100px 20px;">
+            <div class="container">
+                <h2 class="section-title" style="margin-bottom: 60px;">📊 Model Specifications</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-number">16</div>
+                        <div class="stat-label">Frames per Prediction</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number">112×112</div>
+                        <div class="stat-label">Frame Resolution</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">Gesture Classes</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-number">96%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tips Section -->
+        <section style="padding: 100px 20px; background: var(--bg-secondary); border-top: 1px solid var(--border-color);">
+            <div class="container">
+                <h2 class="section-title" style="margin-bottom: 60px;">💡 Tips for Best Results</h2>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;">
+                    <div class="step" style="position: relative;">
+                        <div class="step-icon" style="font-size: 2rem; margin-bottom: 20px;">💡</div>
+                        <h3>Good Lighting</h3>
+                        <p>Ensure your hands and face are well-lit. Natural lighting or bright room lighting works best. Avoid shadows on your hands.</p>
+                    </div>
+                    
+                    <div class="step" style="position: relative;">
+                        <div class="step-icon" style="font-size: 2rem; margin-bottom: 20px;">🎬</div>
+                        <h3>Plain Background</h3>
+                        <p>Use a contrasting background (white wall, solid color) to help the model focus on your hands and body movements.</p>
+                    </div>
+                    
+                    <div class="step" style="position: relative;">
+                        <div class="step-icon" style="font-size: 2rem; margin-bottom: 20px;">📏</div>
+                        <h3>Distance from Camera</h3>
+                        <p>Position yourself 2-3 feet from the camera so your entire upper body (shoulders, arms, hands) is visible in the frame.</p>
+                    </div>
+                    
+                    <div class="step" style="position: relative;">
+                        <div class="step-icon" style="font-size: 2rem; margin-bottom: 20px;">👐</div>
+                        <h3>Visible Hands</h3>
+                        <p>Keep both hands visible throughout the gesture. The model learns from hand position, shape, and motion patterns.</p>
+                    </div>
+                    
+                    <div class="step" style="position: relative;">
+                        <div class="step-icon" style="font-size: 2rem; margin-bottom: 20px;">⚡</div>
+                        <h3>Natural Pace</h3>
+                        <p>Perform the gesture at a natural, deliberate pace (not too fast, not too slow). This matches how the model was trained.</p>
+                    </div>
+                    
+                    <div class="step" style="position: relative;">
+                        <div class="step-icon" style="font-size: 2rem; margin-bottom: 20px;">⏱️</div>
+                        <h3>Video Length</h3>
+                        <p>Record 2-3 seconds of video per gesture. The model automatically extracts 16 evenly-spaced frames for consistent analysis.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">🤟 ISL Recognition</div>
+                <div class="footer-tagline">Giving voice to silence. Making sign language recognition accessible to everyone through AI.</div>
+            </div>
+            
+            <div class="footer-tech">
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="how-it-works.html">How It Works</a></li>
+                        <li><a href="about.html">About ISL</a></li>
+                    </ul>
+                </div>
+                
+                <div class="tech-stack">
+                    <h4>Built With</h4>
+                    <ul>
+                        <li>🔥 PyTorch (R(2+1)D-18)</li>
+                        <li>🎥 OpenCV (Video Processing)</li>
+                        <li>🐍 Flask (REST API)</li>
+                        <li>💻 HTML5 & CSS3</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>© 2025 ISL Recognition | Made with ❤️ for India's deaf and hard of hearing community</p>
+        </div>
+    </footer>
+
+    <script>
+        // Set active nav link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            if (link.getAttribute('href') === 'how-it-works.html') {
+                link.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
