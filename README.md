@@ -1125,7 +1125,7 @@ Allow the model to learn from user corrections without centralising video data, 
 **Institution:** Institute of Engineering & Technology, Lucknow
 **Affiliation:** Dr. A.P.J. Abdul Kalam Technical University (AKTU), Uttar Pradesh, India
 **Programme:** B.Tech Computer Science & Engineering
-**Academic Year:** 2024–2025
+**Academic Year:** 2025–2026
 
 ---
 
