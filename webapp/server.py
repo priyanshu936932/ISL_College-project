@@ -3,7 +3,7 @@ Flask Backend Server for ISL Gesture Recognition
 Runs with: conda activate dl_gpu && python webapp/server.py
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file, after_this_request
 from flask_cors import CORS
 import numpy as np
 import cv2
@@ -279,6 +279,66 @@ def predict_video_endpoint():
     except Exception as e:
         import traceback; traceback.print_exc()
         return jsonify({'error': str(e), 'status': 'error'}), 500
+
+
+@app.route('/transcode-preview', methods=['POST'])
+def transcode_preview():
+    """Re-encode uploaded video to H.264 MP4 so all browsers can play it."""
+    if 'video' not in request.files:
+        return jsonify({'error': 'No video file provided'}), 400
+
+    import tempfile
+    video_file = request.files['video']
+
+    tmp_in  = tempfile.NamedTemporaryFile(suffix='.mp4', delete=False)
+    video_file.save(tmp_in.name)
+    tmp_in.close()
+
+    tmp_out = tempfile.NamedTemporaryFile(suffix='.mp4', delete=False)
+    tmp_out.close()
+
+    try:
+        cap = cv2.VideoCapture(tmp_in.name)
+        if not cap.isOpened():
+            os.unlink(tmp_in.name)
+            return jsonify({'error': 'Cannot open video'}), 400
+
+        fps = cap.get(cv2.CAP_PROP_FPS) or 30
+        w   = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        h   = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+        writer = cv2.VideoWriter(
+            tmp_out.name,
+            cv2.VideoWriter_fourcc(*'avc1'),  # H.264 — plays in all browsers
+            fps, (w, h)
+        )
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+            writer.write(frame)
+
+        cap.release()
+        writer.release()
+        os.unlink(tmp_in.name)
+
+        @after_this_request
+        def _cleanup(response):
+            try:
+                os.unlink(tmp_out.name)
+            except OSError:
+                pass
+            return response
+
+        return send_file(tmp_out.name, mimetype='video/mp4')
+
+    except Exception as e:
+        for p in (tmp_in.name, tmp_out.name):
+            try:
+                os.unlink(p)
+            except OSError:
+                pass
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/health', methods=['GET'])

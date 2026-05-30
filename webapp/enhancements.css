@@ -1,0 +1,251 @@
+/* ============================================================
+   ISL Recognition — Enhancements (additive only, no overrides)
+   ============================================================ */
+
+/* ── 1. Server Status Dot ─────────────────────────────────── */
+.server-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: middle;
+  flex-shrink: 0;
+  position: relative;
+  cursor: default;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+.server-status-dot::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 8px);
+  transform: translateX(-50%);
+  background: rgba(15, 15, 26, 0.95);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #f1f5f9;
+  font-size: 0.72rem;
+  font-family: 'Poppins', sans-serif;
+  white-space: nowrap;
+  padding: 5px 10px;
+  border-radius: 6px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 200;
+}
+
+.server-status-dot:hover::after {
+  opacity: 1;
+}
+
+.server-status-dot.checking {
+  background: #f59e0b;
+  animation: status-blink 1s ease-in-out infinite;
+}
+
+.server-status-dot.online {
+  background: #22c55e;
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.7);
+}
+
+.server-status-dot.offline {
+  background: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+@keyframes status-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* ── 2. Stat Counter (numbers start hidden until animation) ── */
+.stat-number[data-target] {
+  transition: none;
+}
+
+/* ── 3. Analyzing Spinner ─────────────────────────────────── */
+.prediction-card {
+  transition: box-shadow 0.4s ease;
+}
+
+.prediction-card.analyzing {
+  animation: analyzing-ring 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes analyzing-ring {
+  0%   { box-shadow: 0 0 0 2px rgba(124,58,237,0.4), 0 0 40px rgba(124,58,237,0.15); }
+  100% { box-shadow: 0 0 0 3px rgba(236,72,153,0.7), 0 0 60px rgba(236,72,153,0.2); }
+}
+
+/* ── 4. Prediction History Panel ──────────────────────────── */
+#pred-history {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+.pred-history-inner {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 30px 36px;
+}
+
+.pred-history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.pred-history-header h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #a78bfa, #f472b6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.pred-history-clear {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #94a3b8;
+  font-size: 0.8rem;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.25s ease;
+}
+
+.pred-history-clear:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.pred-history-empty {
+  text-align: center;
+  color: #64748b;
+  font-size: 0.95rem;
+  padding: 24px 0;
+}
+
+.pred-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pred-history-item {
+  display: grid;
+  grid-template-columns: 48px 1fr auto;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 14px 18px;
+  animation: history-slide-in 0.35s ease-out;
+}
+
+@keyframes history-slide-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.pred-history-emoji {
+  font-size: 1.8rem;
+  text-align: center;
+  line-height: 1;
+}
+
+.pred-history-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.pred-history-name {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #f1f5f9;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pred-history-conf-track {
+  height: 5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.pred-history-conf-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #7c3aed, #ec4899);
+  transition: width 0.6s ease;
+}
+
+.pred-history-time {
+  color: #64748b;
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+/* ── 5. Copy Result Button ────────────────────────────────── */
+#copy-result-btn {
+  display: none;
+  width: 100%;
+  padding: 0.7rem;
+  margin-top: 14px;
+  background: rgba(124,58,237,0.12);
+  border: 1px solid rgba(124,58,237,0.35);
+  color: #a78bfa;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.02em;
+}
+
+#copy-result-btn:hover {
+  background: rgba(124,58,237,0.25);
+  border-color: #7c3aed;
+  color: #fff;
+}
+
+#copy-result-btn.copied {
+  background: rgba(20,184,166,0.15);
+  border-color: rgba(20,184,166,0.5);
+  color: #2dd4bf;
+}
+
+/* ── 6. Particle Canvas ───────────────────────────────────── */
+#particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+.hero {
+  position: relative;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}

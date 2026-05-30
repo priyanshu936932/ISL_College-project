@@ -33,18 +33,46 @@ function initializeApp() {
     const probContainer = document.getElementById('prob-bars-container');
     const hitCounter = document.getElementById('hit-counter');
     const changeVideoBtn = document.getElementById('change-video-btn');
-    const videoSource = document.getElementById('video-source');
 
     if (!videoUpload || !uploadAnalyzeBtn || !dropZone) {
         console.error('❌ Required DOM elements not found!');
         return;
     }
 
-    // Video error handling
-    videoPreview.addEventListener('error', (e) => {
-        console.error('❌ Video error:', e);
-        console.error('Video error code:', videoPreview.error?.code);
-        showToast('❌ Video format not supported. Try MP4 with H.264 codec');
+    // Video error handling — auto-transcode if browser can't decode the codec
+    let transcodeAttempted = false;
+    videoPreview.addEventListener('error', async () => {
+        const code = videoPreview.error?.code;
+        console.error('❌ Video error code:', code);
+
+        // code 4 = MEDIA_ERR_SRC_NOT_SUPPORTED (e.g. FMP4 / MPEG-4 Part 2)
+        if (code === 4 && !transcodeAttempted && videoUpload.files && videoUpload.files.length > 0) {
+            transcodeAttempted = true;
+            console.log('🔄 Transcoding to H.264 for browser playback...');
+            showToast('🔄 Converting video format for preview...');
+            try {
+                const fd = new FormData();
+                fd.append('video', videoUpload.files[0]);
+                const res = await fetch('http://localhost:5000/transcode-preview', {
+                    method: 'POST',
+                    body: fd
+                });
+                if (res.ok) {
+                    const blob = await res.blob();
+                    videoPreview.src = URL.createObjectURL(blob);
+                    videoPreview.load();
+                    videoPreview.play().catch(() => {});
+                    showToast('✅ Video ready!');
+                } else {
+                    showToast('⚠️ Preview unavailable — analysis will still work');
+                }
+            } catch (err) {
+                console.error('Transcode error:', err);
+                showToast('⚠️ Preview unavailable — analysis will still work');
+            }
+        } else if (code !== undefined && !transcodeAttempted) {
+            showToast('❌ Video format not supported. Try MP4 with H.264 codec');
+        }
     });
 
     videoPreview.addEventListener('loadstart', () => {
@@ -116,6 +144,7 @@ function initializeApp() {
     // ==================== FILE SELECTION ====================
     function handleVideoFileSelect(file) {
         console.log('🎬 File selected:', file.name);
+        transcodeAttempted = false;  // reset for each new video
 
         if (!file.type.startsWith('video/')) {
             showToast('❌ Please select a valid video file (MP4, AVI, MOV)');
@@ -133,9 +162,9 @@ function initializeApp() {
         // Show video preview
         const url = URL.createObjectURL(file);
         videoPreview.style.display = 'block';
-        videoSource.src = url;
-        videoSource.type = 'video/mp4';
-        videoPreview.load();  // Load the video
+        videoPreview.src = url;
+        videoPreview.load();
+        videoPreview.play().catch(() => {});
 
         // Hide drop zone content and show file info
         const dropZoneContent = dropZone.querySelector('.drop-zone-content');
